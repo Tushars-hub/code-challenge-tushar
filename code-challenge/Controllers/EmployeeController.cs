@@ -69,21 +69,28 @@ namespace challenge.Controllers
 
             return Ok(repStructure);
         }
-        [HttpGet("compensation/{id}", Name = "getcompensation")]
-        public IActionResult getcompensation(String id)
+        [HttpGet("compensation/{id}", Name = "getCompensation")]
+        public IActionResult getCompensation(String id)
         {
             _logger.LogDebug($"Received compensation request for '{id}'");
 
-            Compensation compensation = new Compensation();
-            return _employeeService.GetCompensation(id);
+            var Compensation = new _employeeService.GetCompensation();
+            
+            if (Compensation == null)
+                return NotFound();
+            return Ok(Compensation);
         }
-        [HttpPost]
-        public IActionResult CreateEmployee([FromBody] Compensation compensation)
+        [HttpPost(Name = "CreateCompensation")]
+        public IActionResult CreateCompensation([FromBody] Compensation compensation)
         {
             _logger.LogDebug($"Received compensation to create request for '{compensation.Employee.FirstName} {compensation.Employee.LastName}'");
 
+            var Compensation = _employeeService.CreateCompensation(compensation);
+            if (Compensation == null)
+                return NotFound();
+            return Ok(Compensation );   
+
          
-            return _employeeService.CreateCompensation(compensation);
         }
     }
 }
