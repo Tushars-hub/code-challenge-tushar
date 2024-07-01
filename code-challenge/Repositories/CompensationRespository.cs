@@ -9,54 +9,39 @@ using challenge.Data;
 
 namespace challenge.Repositories
 {
-    public class EmployeeRespository : IEmployeeRepository
+    public class CompensationRespository : ICompensationRepository
     {
-        private readonly EmployeeContext _employeeContext;
-        private readonly ILogger<IEmployeeRepository> _logger;
+        private readonly CompensationContext _compensationContext;
+        private readonly ILogger<ICompensationRepository> _logger;
 
-        public EmployeeRespository(ILogger<IEmployeeRepository> logger, EmployeeContext employeeContext)
+        public CompensationRespository(ILogger<ICompensationRepository> logger, CompensationContext compensationContext)
         {
-            _employeeContext = employeeContext;
+            _compensationContext = compensationContext;
             _logger = logger;
         }
 
-        public Employee Add(Employee employee)
+        public Compensation Add(Compensation compensation)
         {
-            employee.EmployeeId = Guid.NewGuid().ToString();
-            _employeeContext.Employees.Add(employee);
-            return employee;
+            compensation.CompensationID = Guid.NewGuid().ToString();
+            _compensationContext.Compensations.Add(compensation);
+            return compensation;
         }
 
-        public Employee GetById(string id)
+        public Compensation GetById(string id)
         {
 
-            //Due to Lazy loading issues with Entity Frameowrk, .Include is necessary to reference DirectReports
-            var employee = _employeeContext.Employees.Include(e => e.DirectReports).SingleOrDefault(e => e.EmployeeId == id);
-            if (employee == null)
-                return null;
-            LoadDirectReports(employee);
-            return employee;
-        }
-        private void LoadDirectReports(Employee employee)
-        {
-            if (employee != null)
-            {
-                _employeeContext.Entry(employee).Collection(e => e.DirectReports).Load();
+              return _compensationContext.Compensations.SingleOrDefault(e => e.Employee.EmployeeId == id);
 
-                foreach (var directReport in employee.DirectReports)
-                {
-                    LoadDirectReports(directReport);
-                }
-            }
         }
+
         public Task SaveAsync()
         {
-            return _employeeContext.SaveChangesAsync();
+            return _compensationContext.SaveChangesAsync();
         }
 
-        public Employee Remove(Employee employee)
+        public Compensation Remove(Compensation compensation)
         {
-            return _employeeContext.Remove(employee).Entity;
+            return _compensationContext.Remove(compensation).Entity;
         }     
     }
 }

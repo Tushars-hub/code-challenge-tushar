@@ -14,7 +14,7 @@ namespace challenge.Controllers
     {
         private readonly ILogger _logger;
         private readonly IEmployeeService _employeeService;
-
+        
         public EmployeeController(ILogger<EmployeeController> logger, IEmployeeService employeeService)
         {
             _logger = logger;
@@ -69,28 +69,27 @@ namespace challenge.Controllers
 
             return Ok(repStructure);
         }
+        [HttpPost("compensation",Name = "CreateCompensation")]
+        public IActionResult CreateCompensation([FromBody] Compensation compensation)
+        {
+            //_logger.LogDebug($"Received compensation to create request for '{compensation.Employee.FirstName} {compensation.Employee.LastName}'");
+
+            var Compensation = _employeeService.CreateCompensation(compensation);
+            if (Compensation == null)
+                return NotFound();
+            return Ok(Compensation);
+        }
         [HttpGet("compensation/{id}", Name = "getCompensation")]
-        public IActionResult getCompensation(String id)
+        public IActionResult GetCompensation(String id)
         {
             _logger.LogDebug($"Received compensation request for '{id}'");
 
-            var Compensation = new _employeeService.GetCompensation();
+            var Compensation = _employeeService.GetCompensation(id);
             
             if (Compensation == null)
                 return NotFound();
             return Ok(Compensation);
         }
-        [HttpPost(Name = "CreateCompensation")]
-        public IActionResult CreateCompensation([FromBody] Compensation compensation)
-        {
-            _logger.LogDebug($"Received compensation to create request for '{compensation.Employee.FirstName} {compensation.Employee.LastName}'");
 
-            var Compensation = _employeeService.CreateCompensation(compensation);
-            if (Compensation == null)
-                return NotFound();
-            return Ok(Compensation );   
-
-         
-        }
     }
 }

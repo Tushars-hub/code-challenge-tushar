@@ -12,6 +12,8 @@ using challenge.Data;
 using Microsoft.EntityFrameworkCore;
 using challenge.Repositories;
 using challenge.Services;
+using challenge.Models;
+using Microsoft.CodeAnalysis;
 
 namespace code_challenge
 {
@@ -34,7 +36,13 @@ namespace code_challenge
             services.AddScoped<IEmployeeRepository,EmployeeRespository>();
             services.AddTransient<EmployeeDataSeeder>();
             services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<ICompensationRepository, CompensationRespository>();
+            services.AddDbContext<CompensationContext>(options =>
+            {
+                options.UseInMemoryDatabase("CompensationDB");
+            });
             services.AddMvc();
+         
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

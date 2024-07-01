@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace challenge.Repositories
 {
-    public interface ICompensationeRepository
+    public interface ICompensationRepository
     {
         Compensation GetById(String id);
         Compensation Add(Compensation compensation);

@@ -16,11 +16,13 @@ namespace challenge.Data
 
         public DbSet<Employee> Employees { get; set; }
     }
-}   
-namespace challenge.Services
-{
-    public class EmployeeService : IEmployeeService
+   
+    public class CompensationContext : DbContext
         {
-            
-        }
+            public CompensationContext(DbContextOptions<CompensationContext> options) : base(options) 
+            {
+            }   
+        public DbSet<Compensation> Compensations { get; set; }
+    }
+        
 }

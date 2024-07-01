@@ -5,18 +5,23 @@ using System.Threading.Tasks;
 using challenge.Models;
 using Microsoft.Extensions.Logging;
 using challenge.Repositories;
+using challenge.Data;
+
 
 namespace challenge.Services
 {
     public class EmployeeService : IEmployeeService
     {
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly ICompensationRepository _compensationRepository;
         private readonly ILogger<EmployeeService> _logger;
-
-        public EmployeeService(ILogger<EmployeeService> logger, IEmployeeRepository employeeRepository)
+       
+        
+        public EmployeeService(ILogger<EmployeeService> logger, IEmployeeRepository employeeRepository, ICompensationRepository compensationRepository)
         {
             _employeeRepository = employeeRepository;
             _logger = logger;
+            _compensationRepository = compensationRepository;
         }
 
         public Employee Create(Employee employee)
@@ -80,19 +85,16 @@ namespace challenge.Services
             }
             return totalReports;
         }
-        public Compensation CreateCompensation(Compensation comp)
+        public Compensation CreateCompensation(Compensation compensation)
         {
-            this.Create(comp);
-            return comp;
+            return _compensationRepository.Add(compensation);
         }
         public Compensation GetCompensation(string id)
         {
-            Compensation comp = new Compensation();
-            comp.Employee = _employeeRepository.GetById(id);
-            comp.EffectiveDate = DateTime.Now;
-            comp.Salary = new decimal(1000);
+            if (string.IsNullOrEmpty(id))
+            { return null; }
 
-            return comp;
+            return _compensationRepository.GetById(id);
         }
     }
 }
