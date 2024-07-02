@@ -13,7 +13,7 @@ namespace challenge.Services
     public class EmployeeService : IEmployeeService
     {
         private readonly IEmployeeRepository _employeeRepository;
-        private readonly ICompensationRepository _compensationRepository;
+        private readonly ICompensationRepository _compensationRepository;      
         private readonly ILogger<EmployeeService> _logger;
        
         

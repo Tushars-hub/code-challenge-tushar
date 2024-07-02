@@ -28,8 +28,14 @@ namespace code_challenge.Tests.Integration
                 options.UseInMemoryDatabase("EmployeeDB");
             });
             services.AddScoped<IEmployeeRepository,EmployeeRespository>();
+            services.AddScoped<ICompensationRepository,CompensationRespository>();
             services.AddTransient<EmployeeDataSeeder>();
             services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddDbContext<CompensationContext>(options =>
+            {
+                options.UseInMemoryDatabase("CompensationDB");
+            });
+            services.AddMvc();
             services.AddMvc();
         }
 
